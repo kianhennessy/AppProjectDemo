@@ -34,6 +34,32 @@ function App() {
   );
 }
 
+function ChatRoom() {
+    const messageRef = firestore.collection('messages');
+    const query = messageRef.orderBy('createdAt').limit(25);
+
+    const [messages] = useCollectionData(query, {idField: 'id'});
+
+    return (
+        <>
+            <div>
+                {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg} />)}
+            </div>
+
+            <div>
+
+            </div>
+        </>
+    )
+}
+
+function ChatMessage(props) {
+    const { text, uid } = props.message;
+    const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received';
+
+    return <p>{text}</p>
+}
+
 function SignIn() {
     const signInWithGoogle = () => {
         const provider = new firebase.auth.GoogleAuthProvider();
@@ -44,10 +70,10 @@ function SignIn() {
     )
 }
 
-function ChatRoom() {
+function SignOut() {
     return auth.currentUser && (
         <button onClick={() => auth.signOut()}>Sign Out</button>
     )
-
 }
+
 export default App;
