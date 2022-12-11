@@ -1,5 +1,5 @@
 import logo from './logo.svg';
-import React from 'react';
+import React, {useState} from 'react';
 import './App.css';
 
 import firebase from 'firebase/app';
@@ -39,6 +39,11 @@ function ChatRoom() {
     const query = messageRef.orderBy('createdAt').limit(25);
 
     const [messages] = useCollectionData(query, {idField: 'id'});
+    const [formValue, setFormValue] = useState('');
+
+    const sendMessage = async(e) => {
+        
+    }
 
     return (
         <>
@@ -46,18 +51,24 @@ function ChatRoom() {
                 {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg} />)}
             </div>
 
-            <div>
-
-            </div>
+            <form onSubmit={sendMessage}>
+                <input value={formValue} onChange={(e) => setFormValue(e.target.value)} />
+                <button type="submit">Send</button>
+            </form>
         </>
     )
 }
 
 function ChatMessage(props) {
-    const { text, uid } = props.message;
+    const { text, uid, photoURL } = props.message;
     const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received';
 
-    return <p>{text}</p>
+    return (
+        <div className={`message ${messageClass}`}>
+            <img src={photoURL} />
+            <p>{text}</p>
+        </div>
+    )
 }
 
 function SignIn() {
