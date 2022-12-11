@@ -48,15 +48,14 @@ function SignIn() {
     }
     return(
         <>
-        <button onClick={signInWithGoogle}>Sign in with Google</button>
-
+            <button className="sign-in" onClick={signInWithGoogle}>Sign in with Google</button>
         </>
     )
 }
 
 function SignOut() {
     return auth.currentUser && (
-        <button onClick={() => auth.signOut()}>Sign Out</button>
+        <button className="sign-out" onClick={() => auth.signOut()}>Sign Out</button>
     )
 }
 
@@ -86,15 +85,20 @@ function ChatRoom() {
 
     return (
         <>
-            <div>
-                {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg} />)}
-            </div>
+            <main>
 
-            <div ref={dummy}></div>
+                {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg} />)}
+
+                <span ref={dummy}></span>
+
+            </main>
 
             <form onSubmit={sendMessage}>
-                <input value={formValue} onChange={(e) => setFormValue(e.target.value)} />
-                <button type="submit">Send</button>
+
+                <input value={formValue} onChange={(e) => setFormValue(e.target.value)} placeholder="Message body" />
+
+                <button type="submit" disabled={!formValue}>Send</button>
+
             </form>
         </>
     )
@@ -106,7 +110,7 @@ function ChatMessage(props) {
 
     return (
         <div className={`message ${messageClass}`}>
-            <img src={photoURL} />
+            <img src={photoURL || 'https://api.adorable.io/avatars/23/abott@adorable.png'} />
             <p>{text}</p>
         </div>
     )
